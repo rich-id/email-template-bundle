@@ -18,10 +18,5 @@
         <prototype namespace="RichId\EmailTemplateBundle\Infrastructure\"
                    resource="../../../Infrastructure"
         />
-
-        <!-- UserInterface -->
-        <prototype namespace="RichId\EmailTemplateBundle\UserInterface\"
-                   resource="../../../UserInterface"
-        />
     </services>
 </container>
