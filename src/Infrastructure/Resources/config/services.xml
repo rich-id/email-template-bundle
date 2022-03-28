@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false"/>
+
+        <!-- Domain -->
+
+        <prototype namespace="RichId\EmailTemplateBundle\Domain\"
+                   resource="../../../Domain"
+                   exclude="../../Domain/{Entity,Event,Exception}"
+        />
+
+        <!-- Infrastructure -->
+        <prototype namespace="RichId\EmailTemplateBundle\Infrastructure\"
+                   resource="../../../Infrastructure"
+        />
+
+        <!-- UserInterface -->
+        <prototype namespace="RichId\EmailTemplateBundle\UserInterface\"
+                   resource="../../../UserInterface"
+        />
+    </services>
+</container>
