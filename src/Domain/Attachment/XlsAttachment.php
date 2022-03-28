@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RichId\EmailTemplateBundle\Domain\Attachment;
 
-final class XlsAttachment extends \Swift_Attachment
+final class XlsAttachment extends Attachment
 {
     public static function build(mixed $data, string $filename): self
     {

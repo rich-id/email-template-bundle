@@ -12,17 +12,18 @@ use RichId\EmailTemplateBundle\Domain\EmailManager;
 use RichId\EmailTemplateBundle\Domain\Entity\EmailTemplateConfiguration;
 use RichId\EmailTemplateBundle\Domain\Model\EmailModelInterface;
 use RichId\EmailTemplateBundle\Infrastructure\Repository\EmailTemplateConfigurationRepository;
+use Symfony\Component\Mime\Email;
 
 abstract class EmailTestCase extends TestCase
 {
     abstract protected function getEmailSlug(): string;
 
-    public static function assertEmailBody(string $expected, \Swift_Message $email): void
+    public static function assertEmailBody(string $expected, Email $email): void
     {
-        static::assertSame(\rtrim($expected), \rtrim($email->getBody()));
+        static::assertSame(\rtrim($expected), \rtrim($email->getBody()->toString()));
     }
 
-    protected function getEmail(string $template = Constant::DEFAULT_TEMPLATE, ?EmailModelInterface $data = null): ?\Swift_Message
+    protected function getEmail(string $template = Constant::DEFAULT_TEMPLATE, ?EmailModelInterface $data = null): ?Email
     {
         $this->setSpecificTemplate($template);
 

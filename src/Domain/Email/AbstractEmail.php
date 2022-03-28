@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RichId\EmailTemplateBundle\Domain\Email;
 
+use RichId\EmailTemplateBundle\Domain\Attachment\Attachment;
 use RichId\EmailTemplateBundle\Domain\Constant;
 use RichId\EmailTemplateBundle\Domain\Email\Trait\EmailDataTrait;
 use RichId\EmailTemplateBundle\Domain\Exception\InvalidEmailServiceException;
@@ -12,6 +13,7 @@ use RichId\EmailTemplateBundle\Domain\Port\ConfigurationInterface;
 use RichId\EmailTemplateBundle\Domain\Port\MailerInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TemplatingInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TranslatorInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractEmail
@@ -69,7 +71,7 @@ abstract class AbstractEmail
         return [];
     }
 
-    /** @return \Swift_Attachment[] */
+    /** @return Attachment[] */
     protected function getAttachments(): array
     {
         return [];
@@ -126,7 +128,7 @@ abstract class AbstractEmail
         return [];
     }
 
-    final protected function getEmail(): ?\Swift_Message
+    final protected function getEmail(): ?Email
     {
         $template = $this->getTemplateSlug();
 
@@ -141,38 +143,37 @@ abstract class AbstractEmail
             return null;
         }
 
-        $message = new \Swift_Message();
-        $message->setContentType('text/html')
-            ->setSubject($this->getSubject())
-            ->setBody($this->getBody())
-            ->setTo($to);
+        $email = new Email();
+        $email->subject($this->getSubject())
+            ->html($this->getBody())
+            ->to(...$to);
 
         if (!empty($this->getCc())) {
-            $message->setCc($this->getCc());
+            $email->cc(...$this->getCc());
         }
 
         if (!empty($this->getFrom())) {
-            $message->setFrom($this->getFrom());
+            $email->from(...$this->getFrom());
         }
 
         foreach ($this->getAttachments() as $attachment) {
-            if ($attachment instanceof \Swift_Mime_SimpleMimeEntity) {
-                $message->attach($attachment);
+            if ($attachment instanceof Attachment) {
+                $email->attach($attachment->getData(), $attachment->getFilename(), $attachment->getContentType());
             }
         }
 
-        return $message;
+        return $email;
     }
 
-    final public function send(): int
+    final public function send(): void
     {
         $email = $this->getEmail();
 
         if ($email === null) {
-            return 0;
+            return;
         }
 
-        return $this->mailer->send($email);
+        $this->mailer->send($email);
     }
 
     final public function supportTemplate(string $template): bool

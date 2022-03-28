@@ -26,9 +26,9 @@ final class EmailManager
         return $service;
     }
 
-    public function send(string $slug, ?EmailModelInterface $data = null): int
+    public function send(string $slug, ?EmailModelInterface $data = null): void
     {
-        return $this->getEmail($slug)
+        $this->getEmail($slug)
             ->setData($data)
             ->send();
     }

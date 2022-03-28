@@ -4,10 +4,31 @@ declare(strict_types=1);
 
 namespace RichId\EmailTemplateBundle\Domain\Attachment;
 
-final class Attachment extends \Swift_Attachment
+class Attachment
 {
-    public static function build(mixed $data, string $filename, string $contentType): self
+    private string $data;
+    private string $filename;
+    private string $contentType;
+
+    public function __construct(string $data, string $filename, string $contentType)
     {
-        return new self($data, $filename, $contentType);
+        $this->data = $data;
+        $this->filename = $filename;
+        $this->contentType = $contentType;
+    }
+
+    public function getData(): string
+    {
+        return $this->data;
+    }
+
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    public function getContentType(): string
+    {
+        return $this->contentType;
     }
 }
