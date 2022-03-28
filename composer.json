@@ -57,10 +57,10 @@
     "extra": {
         "hooks": {
             "pre-commit": [
-                "docker-compose exec -T application ./vendor/bin/php-cs-fixer fix"
+                "docker-compose exec -T application ./vendor/bin/php-cs-fixer fix ."
             ],
             "pre-push": [
-                "docker-compose exec -T application ./vendor/bin/php-cs-fixer fix --dry-run",
+                "docker-compose exec -T application ./vendor/bin/php-cs-fixer fix . --dry-run",
                 "docker-compose exec -T application ./vendor/bin/static_analysis"
             ]
         }
