@@ -1,0 +1,17 @@
+empty.default.body: Empty email content
+empty.default.subject: Empty subject
+empty.name: Email with empty data
+
+empty_to.name: Email with empty to
+invalid_type.name: Invalid type email
+
+test_1.default.body: 'Email content with value: %value%'
+test_1.default.subject: My subject
+
+test_1.new_template.body: 'New email content with value: %value%'
+test_1.new_template.subject: New subject
+
+test_1.other_template.body: 'Other email content with value: %value%'
+test_1.other_template.subject: Other subject
+
+test_1.name: Email 1

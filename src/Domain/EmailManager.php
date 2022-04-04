@@ -8,12 +8,16 @@ use RichId\EmailTemplateBundle\Domain\Email\AbstractEmail;
 use RichId\EmailTemplateBundle\Domain\Exception\EmailNotFoundException;
 use RichId\EmailTemplateBundle\Domain\Internal\InternalEmailManager;
 use RichId\EmailTemplateBundle\Domain\Model\EmailModelInterface;
+use RichId\EmailTemplateBundle\Domain\Port\MailerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class EmailManager
 {
     #[Required]
     public InternalEmailManager $internalEmailManager;
+
+    #[Required]
+    public MailerInterface $mailer;
 
     public function getEmail(string $slug): AbstractEmail
     {
@@ -28,8 +32,18 @@ final class EmailManager
 
     public function send(string $slug, ?EmailModelInterface $data = null): void
     {
-        $this->getEmail($slug)
-            ->setData($data)
-            ->send();
+        $emailService = $this->getEmail($slug);
+
+        $method = new \ReflectionMethod($emailService, 'getEmail');
+        $method->setAccessible(true);
+
+        $email = $method->invoke($emailService->setData($data));
+        $method->setAccessible(false);
+
+        if ($email === null) {
+            return;
+        }
+
+        $this->mailer->send($email);
     }
 }

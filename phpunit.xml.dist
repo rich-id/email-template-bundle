@@ -35,6 +35,7 @@
             <directory>src/Infrastructure/DependencyInjection</directory>
             <directory>src/Infrastructure/Migrations</directory>
             <directory>src/Infrastructure/Resources</directory>
+            <directory>src/Infrastructure/TestCase</directory>
             <file>src/Infrastructure/RichIdEmailTemplateBundle.php</file>
         </exclude>
     </coverage>

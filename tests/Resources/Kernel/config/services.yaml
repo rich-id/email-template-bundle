@@ -4,8 +4,11 @@ services:
         autowire: true
         public: true
 
-    RichId\EmailCustomizationBundle\Domain\UseCase\GetEmailFooter: ~
+    RichId\EmailTemplateBundle\Tests\Resources\Email\Empty\EmptyEmail: ~
+    RichId\EmailTemplateBundle\Tests\Resources\Email\EmptyTo\EmptyToEmail: ~
+    RichId\EmailTemplateBundle\Tests\Resources\Email\InvalidType\InvalidTypeEmail: ~
+    RichId\EmailTemplateBundle\Tests\Resources\Email\Test1\OtherTest1Email: ~
+    RichId\EmailTemplateBundle\Tests\Resources\Email\Test1\Test1Email: ~
 
-    RichId\EmailCustomizationBundle\Tests\Resources\Fixtures\EmailConfigurationFixtures: ~
-    RichId\EmailCustomizationBundle\Tests\Resources\Fixtures\DummyUserFixtures: ~
-    RichId\EmailCustomizationBundle\Tests\Resources\Stubs\GetEmailFooterStub: ~
+    RichId\EmailTemplateBundle\Domain\EmailManager: ~
+    RichId\EmailTemplateBundle\Domain\Fetcher\AdministrationEmailsFetcher: ~

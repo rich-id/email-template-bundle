@@ -9,8 +9,6 @@ use RichId\EmailTemplateBundle\Domain\Constant;
 use RichId\EmailTemplateBundle\Domain\Email\Trait\EmailDataTrait;
 use RichId\EmailTemplateBundle\Domain\Exception\InvalidEmailServiceException;
 use RichId\EmailTemplateBundle\Domain\Fetcher\EmailTemplateFetcher;
-use RichId\EmailTemplateBundle\Domain\Port\ConfigurationInterface;
-use RichId\EmailTemplateBundle\Domain\Port\MailerInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TemplatingInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TranslatorInterface;
 use Symfony\Component\Mime\Email;
@@ -26,11 +24,8 @@ abstract class AbstractEmail
     protected const BODY_TYPE_TRANSLATION = 'translation';
     protected const BODY_TYPE_TWIG = 'twig';
 
-    #[Required]
-    public ConfigurationInterface $configuration;
-
-    #[Required]
-    public MailerInterface $mailer;
+    protected const TRANSLATION_DOMAIN = 'emails';
+    protected const TEMPLATING_FOLDER = 'emails';
 
     #[Required]
     public TemplatingInterface $templating;
@@ -55,12 +50,18 @@ abstract class AbstractEmail
         return $this->translator->trans(
             \sprintf('%s.name', $this->getEmailSlug()),
             [],
-            $this->configuration->getTranslationPrefix()
+            static::TRANSLATION_DOMAIN
         );
     }
 
     /** @return string[] */
     protected function getCc(): array
+    {
+        return [];
+    }
+
+    /** @return string[] */
+    protected function getBcc(): array
     {
         return [];
     }
@@ -82,7 +83,7 @@ abstract class AbstractEmail
         return $this->translator->trans(
             \sprintf('%s.%s.%s', $this->getEmailSlug(), $this->getTemplateSlug(), 'subject'),
             $this->customSubjectParameters(),
-            $this->configuration->getTranslationPrefix()
+            static::TRANSLATION_DOMAIN
         );
     }
 
@@ -102,22 +103,22 @@ abstract class AbstractEmail
             return $this->getTwigBody();
         }
 
-        return '';
+        throw new \InvalidArgumentException(\sprintf('Invalid argument for BODY_TYPE: %s given.', static::BODY_TYPE));
     }
 
-    protected function getTranslationBody(string $templatingFolder = 'emails'): string
+    protected function getTranslationBody(): string
     {
         return $this->translator->trans(
             \sprintf('%s.%s.%s', $this->getEmailSlug(), $this->getTemplateSlug(), 'body'),
             $this->customBodyParameters(),
-            $this->configuration->getTranslationPrefix()
+            static::TRANSLATION_DOMAIN
         );
     }
 
-    protected function getTwigBody(string $templatingFolder = 'emails'): string
+    protected function getTwigBody(): string
     {
         return $this->templating->render(
-            \sprintf('%s/%s/%s.html.twig', $templatingFolder, $this->getEmailSlug(), $this->getTemplateSlug()),
+            \sprintf('%s/%s/%s.html.twig', static::TEMPLATING_FOLDER, $this->getEmailSlug(), $this->getTemplateSlug()),
             $this->customBodyParameters()
         );
     }
@@ -152,6 +153,10 @@ abstract class AbstractEmail
             $email->cc(...$this->getCc());
         }
 
+        if (!empty($this->getBcc())) {
+            $email->bcc(...$this->getBcc());
+        }
+
         if (!empty($this->getFrom())) {
             $email->from(...$this->getFrom());
         }
@@ -163,17 +168,6 @@ abstract class AbstractEmail
         }
 
         return $email;
-    }
-
-    final public function send(): void
-    {
-        $email = $this->getEmail();
-
-        if ($email === null) {
-            return;
-        }
-
-        $this->mailer->send($email);
     }
 
     final public function supportTemplate(string $template): bool

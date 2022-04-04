@@ -9,7 +9,7 @@ use RichId\EmailTemplateBundle\Infrastructure\Repository\EmailTemplateConfigurat
 
 #[ORM\Entity(repositoryClass: EmailTemplateConfigurationRepository::class)]
 #[ORM\Table(name: 'module_email_template_configuration')]
-final class EmailTemplateConfiguration
+class EmailTemplateConfiguration
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
