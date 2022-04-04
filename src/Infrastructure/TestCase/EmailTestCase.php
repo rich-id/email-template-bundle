@@ -20,7 +20,7 @@ abstract class EmailTestCase extends TestCase
 
     public static function assertEmailBody(string $expected, Email $email): void
     {
-        static::assertSame(\rtrim($expected), \rtrim($email->getBody()->toString()));
+        static::assertSame(\rtrim($expected), \rtrim($email->getHtmlBody()));
     }
 
     protected function getEmail(string $template = Constant::DEFAULT_TEMPLATE, ?EmailModelInterface $data = null): ?Email
