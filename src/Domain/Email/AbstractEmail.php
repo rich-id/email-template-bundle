@@ -147,18 +147,18 @@ abstract class AbstractEmail
         $email = new Email();
         $email->subject($this->getSubject())
             ->html($this->getBody())
-            ->to(...$to);
+            ->to(...\array_unique($to));
 
         if (!empty($this->getCc())) {
-            $email->cc(...$this->getCc());
+            $email->cc(...\array_unique($this->getCc()));
         }
 
         if (!empty($this->getBcc())) {
-            $email->bcc(...$this->getBcc());
+            $email->bcc(...\array_unique($this->getBcc()));
         }
 
         if (!empty($this->getFrom())) {
-            $email->from(...$this->getFrom());
+            $email->from(...\array_unique($this->getFrom()));
         }
 
         foreach ($this->getAttachments() as $attachment) {
