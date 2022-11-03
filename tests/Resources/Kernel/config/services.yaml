@@ -7,6 +7,7 @@ services:
     RichId\EmailTemplateBundle\Tests\Resources\Email\Empty\EmptyEmail: ~
     RichId\EmailTemplateBundle\Tests\Resources\Email\EmptyTo\EmptyToEmail: ~
     RichId\EmailTemplateBundle\Tests\Resources\Email\InvalidType\InvalidTypeEmail: ~
+    RichId\EmailTemplateBundle\Tests\Resources\Email\Skipped\SkippedEmail: ~
     RichId\EmailTemplateBundle\Tests\Resources\Email\Test1\OtherTest1Email: ~
     RichId\EmailTemplateBundle\Tests\Resources\Email\Test1\Test1Email: ~
 

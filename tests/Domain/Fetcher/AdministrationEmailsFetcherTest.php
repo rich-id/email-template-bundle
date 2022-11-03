@@ -24,7 +24,7 @@ final class AdministrationEmailsFetcherTest extends TestCase
     {
         $emails = ($this->administrationEmailsFetcher)();
 
-        self::assertCount(4, $emails);
+        self::assertCount(5, $emails);
 
         self::assertSame('Email with empty data', $emails[0]->name);
         self::assertSame('empty', $emails[0]->slug);
@@ -41,9 +41,14 @@ final class AdministrationEmailsFetcherTest extends TestCase
         self::assertSame('default', $emails[2]->value);
         self::assertSame(['default'], $emails[2]->allowedValues);
 
-        self::assertSame('Email 1', $emails[3]->name);
-        self::assertSame('test_1', $emails[3]->slug);
+        self::assertSame('Skipped email', $emails[3]->name);
+        self::assertSame('skipped', $emails[3]->slug);
         self::assertSame('default', $emails[3]->value);
-        self::assertSame(['new_template', 'default', 'other_template'], $emails[3]->allowedValues);
+        self::assertSame(['default'], $emails[3]->allowedValues);
+
+        self::assertSame('Email 1', $emails[4]->name);
+        self::assertSame('test_1', $emails[4]->slug);
+        self::assertSame('default', $emails[4]->value);
+        self::assertSame(['new_template', 'default', 'other_template'], $emails[4]->allowedValues);
     }
 }

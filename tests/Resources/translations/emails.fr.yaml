@@ -5,6 +5,8 @@ empty.name: Email with empty data
 empty_to.name: Email with empty to
 invalid_type.name: Invalid type email
 
+skipped.name: Skipped email
+
 test_1.default.body: 'Email content with value: %value%'
 test_1.default.subject: My subject
 

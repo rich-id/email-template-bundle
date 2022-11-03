@@ -78,6 +78,11 @@ abstract class AbstractEmail
         return [];
     }
 
+    protected function skippedIf(): bool
+    {
+        return false;
+    }
+
     protected function getSubject(): string
     {
         return $this->translator->trans(
@@ -138,6 +143,11 @@ abstract class AbstractEmail
         }
 
         $this->assertValidParameters();
+
+        if ($this->skippedIf()) {
+            return null;
+        }
+
         $to = $this->getTo();
 
         if (empty($to)) {
