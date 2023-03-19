@@ -18,7 +18,6 @@ use Symfony\Component\Mime\Email;
  * @covers \RichId\EmailTemplateBundle\Domain\Attachment\XlsAttachment
  * @covers \RichId\EmailTemplateBundle\Domain\Attachment\XmlAttachment
  * @covers \RichId\EmailTemplateBundle\Domain\Email\AbstractEmail
- * @covers \RichId\EmailTemplateBundle\Domain\Email\Trait\EmailDataTrait
  * @covers \RichId\EmailTemplateBundle\Domain\EmailManager
  * @covers \RichId\EmailTemplateBundle\Domain\Exception\EmailNotFoundException
  * @covers \RichId\EmailTemplateBundle\Domain\Internal\InternalEmailManager

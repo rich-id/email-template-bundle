@@ -9,15 +9,15 @@ use RichId\EmailTemplateBundle\Domain\Constant;
 use RichId\EmailTemplateBundle\Domain\Email\Trait\EmailDataTrait;
 use RichId\EmailTemplateBundle\Domain\Exception\InvalidEmailServiceException;
 use RichId\EmailTemplateBundle\Domain\Fetcher\EmailTemplateFetcher;
+use RichId\EmailTemplateBundle\Domain\Model\EmailModelInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TemplatingInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TranslatorInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/** @template T of EmailModelInterface */
 abstract class AbstractEmail
 {
-    use EmailDataTrait;
-
     public const TEMPLATES = [Constant::DEFAULT_TEMPLATE];
     protected const BODY_TYPE = self::BODY_TYPE_TRANSLATION;
 
@@ -35,6 +35,21 @@ abstract class AbstractEmail
 
     #[Required]
     public EmailTemplateFetcher $emailTemplateFetcher;
+
+    /** @var ?T */
+    protected ?EmailModelInterface $data = null;
+
+    /**
+     * @param ?T $data
+     *
+     * @return AbstractEmail<T>
+     */
+    public function setData(?EmailModelInterface $data): self
+    {
+        $this->data = $data;
+
+        return $this;
+    }
 
     abstract public function getEmailSlug(): string;
 
