@@ -18,7 +18,6 @@ use RichId\EmailTemplateBundle\Tests\Resources\Email\Test1\Test1Model;
  * @covers \RichId\EmailTemplateBundle\Domain\Attachment\XlsAttachment
  * @covers \RichId\EmailTemplateBundle\Domain\Attachment\XmlAttachment
  * @covers \RichId\EmailTemplateBundle\Domain\Email\AbstractEmail
- * @covers \RichId\EmailTemplateBundle\Domain\Email\Trait\EmailDataTrait
  * @covers \RichId\EmailTemplateBundle\Domain\EmailManager
  * @covers \RichId\EmailTemplateBundle\Domain\Entity\EmailTemplateConfiguration
  * @covers \RichId\EmailTemplateBundle\Domain\Exception\MissingEmailParameterException
