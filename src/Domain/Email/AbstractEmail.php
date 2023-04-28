@@ -6,7 +6,6 @@ namespace RichId\EmailTemplateBundle\Domain\Email;
 
 use RichId\EmailTemplateBundle\Domain\Attachment\Attachment;
 use RichId\EmailTemplateBundle\Domain\Constant;
-use RichId\EmailTemplateBundle\Domain\Email\Trait\EmailDataTrait;
 use RichId\EmailTemplateBundle\Domain\Exception\InvalidEmailServiceException;
 use RichId\EmailTemplateBundle\Domain\Fetcher\EmailTemplateFetcher;
 use RichId\EmailTemplateBundle\Domain\Model\EmailModelInterface;
@@ -26,6 +25,8 @@ abstract class AbstractEmail
 
     protected const TRANSLATION_DOMAIN = 'emails';
     protected const TEMPLATING_FOLDER = 'emails';
+
+    protected const EMAIL_CLASS = Email::class;
 
     #[Required]
     public TemplatingInterface $templating;
@@ -149,6 +150,10 @@ abstract class AbstractEmail
         return [];
     }
 
+    protected function emailUpdater(Email $email): void
+    {
+    }
+
     final protected function getEmail(): ?Email
     {
         $template = $this->getTemplateSlug();
@@ -169,7 +174,7 @@ abstract class AbstractEmail
             return null;
         }
 
-        $email = new Email();
+        $email = new (static::EMAIL_CLASS)();
         $email->subject($this->getSubject())
             ->html($this->getBody())
             ->to(...\array_unique($to));
@@ -191,6 +196,8 @@ abstract class AbstractEmail
                 $email->attach($attachment->getData(), $attachment->getFilename(), $attachment->getContentType());
             }
         }
+
+        $this->emailUpdater($email);
 
         return $email;
     }
