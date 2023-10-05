@@ -9,6 +9,7 @@ use RichId\EmailTemplateBundle\Domain\Exception\EmailNotFoundException;
 use RichId\EmailTemplateBundle\Domain\Internal\InternalEmailManager;
 use RichId\EmailTemplateBundle\Domain\Model\EmailModelInterface;
 use RichId\EmailTemplateBundle\Domain\Port\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class EmailManager
@@ -37,6 +38,7 @@ final class EmailManager
         $method = new \ReflectionMethod($emailService, 'getEmail');
         $method->setAccessible(true);
 
+        /** @var Email|null $email */
         $email = $method->invoke($emailService->setData($data));
         $method->setAccessible(false);
 
@@ -45,5 +47,21 @@ final class EmailManager
         }
 
         $this->mailer->send($email);
+    }
+
+    public function getEmailContent(string $slug, ?EmailModelInterface $data = null): ?string
+    {
+        $emailService = $this->getEmail($slug);
+
+        $method = new \ReflectionMethod($emailService, 'getEmail');
+        $method->setAccessible(true);
+
+        /** @var Email|null $email */
+        $email = $method->invoke($emailService->setData($data));
+        $method->setAccessible(false);
+
+        $body = $email?->getHtmlBody();
+
+        return !empty($body) ? (string) $body : null;
     }
 }
