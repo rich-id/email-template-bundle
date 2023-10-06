@@ -33,14 +33,7 @@ final class EmailManager
 
     public function send(string $slug, ?EmailModelInterface $data = null): void
     {
-        $emailService = $this->getEmail($slug);
-
-        $method = new \ReflectionMethod($emailService, 'getEmail');
-        $method->setAccessible(true);
-
-        /** @var Email|null $email */
-        $email = $method->invoke($emailService->setData($data));
-        $method->setAccessible(false);
+        $email = $this->generateEmail($slug, $data);
 
         if ($email === null) {
             return;
@@ -51,17 +44,22 @@ final class EmailManager
 
     public function getEmailContent(string $slug, ?EmailModelInterface $data = null): ?string
     {
+        $email = $this->generateEmail($slug, $data);
+        $body = $email?->getHtmlBody();
+
+        return !empty($body) ? (string) $body : null;
+    }
+
+    private function generateEmail(string $slug, ?EmailModelInterface $data = null): ?Email
+    {
         $emailService = $this->getEmail($slug);
 
         $method = new \ReflectionMethod($emailService, 'getEmail');
         $method->setAccessible(true);
 
-        /** @var Email|null $email */
         $email = $method->invoke($emailService->setData($data));
         $method->setAccessible(false);
 
-        $body = $email?->getHtmlBody();
-
-        return !empty($body) ? (string) $body : null;
+        return $email;
     }
 }

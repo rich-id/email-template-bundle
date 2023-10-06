@@ -65,4 +65,34 @@ final class EmailManagerTest extends TestCase
         $messageEvents = $this->getService('mailer.message_logger_listener')->getEvents()->getEvents();
         self::assertEmpty($messageEvents);
     }
+
+    public function testGetEmailContentEmailNotFound(): void
+    {
+        self::expectException(EmailNotFoundException::class);
+        self::expectExceptionMessage('No email found for the given slug other.');
+
+        $this->emailManager->getEmailContent('other');
+    }
+
+    public function testGetEmailContenWithMissingParameters(): void
+    {
+        self::expectException(MissingEmailParameterException::class);
+        self::expectExceptionMessage('Missing parameters given for this email.');
+
+        $this->emailManager->getEmailContent('test_1');
+    }
+
+    public function testGetEmailContentEmptyTo(): void
+    {
+        $content = $this->emailManager->getEmailContent('empty_to');
+
+        self::assertNull($content);
+    }
+
+    public function testGetEmailContenEmptyTo(): void
+    {
+        $content = $this->emailManager->getEmailContent('test_1', Test1Model::build('my value'));
+
+        self::assertSame('Email content with value: my value', $content);
+    }
 }
