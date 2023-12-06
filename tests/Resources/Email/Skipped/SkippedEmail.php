@@ -15,6 +15,11 @@ class SkippedEmail extends AbstractEmail
         return self::SLUG;
     }
 
+    public function canSeeEmailInAdministration(): bool
+    {
+        return false;
+    }
+
     protected function getTo(): array
     {
         return ['test@test.test'];

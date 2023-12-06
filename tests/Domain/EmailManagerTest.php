@@ -6,11 +6,13 @@ namespace RichId\EmailTemplateBundle\Tests\Domain;
 
 use RichCongress\TestFramework\TestConfiguration\Annotation\TestConfig;
 use RichCongress\TestSuite\TestCase\TestCase;
+use RichId\EmailTemplateBundle\Domain\Email\AbstractEmail;
 use RichId\EmailTemplateBundle\Domain\EmailManager;
 use RichId\EmailTemplateBundle\Domain\Exception\EmailNotFoundException;
 use RichId\EmailTemplateBundle\Domain\Exception\MissingEmailParameterException;
 use RichId\EmailTemplateBundle\Tests\Resources\Email\Test1\Test1Model;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Header\HeaderInterface;
 
 /**
  * @covers \RichId\EmailTemplateBundle\Domain\Attachment\Attachment
@@ -56,6 +58,10 @@ final class EmailManagerTest extends TestCase
         /** @var Email $email */
         $email = $messageEvents[0]->getMessage();
         self::assertSame('My subject', $email->getSubject());
+
+        $header = $email->getHeaders()->get(AbstractEmail::EMAIL_SLUG_HEADER);
+        self::assertInstanceOf(HeaderInterface::class, $header);
+        self::assertSame('test_1', $header->getBody());
     }
 
     public function testSendEmptyTo(): void

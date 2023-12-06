@@ -22,6 +22,10 @@ final class AdministrationEmailsFetcher
         $models = [];
 
         foreach ($this->internalEmailManager->emails as $email) {
+            if (!$email->canSeeEmailInAdministration()) {
+                continue;
+            }
+
             if (!isset($models[$email->getEmailSlug()])) {
                 $models[$email->getEmailSlug()] = AdministrationEmailModel::build(
                     $email->getEmailSlug(),

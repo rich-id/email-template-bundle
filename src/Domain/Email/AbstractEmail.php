@@ -18,6 +18,8 @@ use Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractEmail
 {
     public const TEMPLATES = [Constant::DEFAULT_TEMPLATE];
+    public const EMAIL_SLUG_HEADER = 'abstract-email-slug';
+
     protected const BODY_TYPE = self::BODY_TYPE_TRANSLATION;
 
     protected const BODY_TYPE_TRANSLATION = 'translation';
@@ -68,6 +70,11 @@ abstract class AbstractEmail
             [],
             static::TRANSLATION_DOMAIN
         );
+    }
+
+    public function canSeeEmailInAdministration(): bool
+    {
+        return true;
     }
 
     /** @return string[] */
@@ -174,10 +181,13 @@ abstract class AbstractEmail
             return null;
         }
 
+        /** @var Email $email */
         $email = new (static::EMAIL_CLASS)();
         $email->subject($this->getSubject())
             ->html($this->getBody())
             ->to(...\array_unique($to));
+
+        $email->getHeaders()->addTextHeader(self::EMAIL_SLUG_HEADER, $this->getEmailSlug());
 
         if (!empty($this->getCc())) {
             $email->cc(...\array_unique($this->getCc()));

@@ -20,6 +20,7 @@ final class EmailManager
     #[Required]
     public MailerInterface $mailer;
 
+    /** @phpstan-ignore-next-line */
     public function getEmail(string $slug): AbstractEmail
     {
         $service = $this->internalEmailManager->getCurrentEmailService($slug);

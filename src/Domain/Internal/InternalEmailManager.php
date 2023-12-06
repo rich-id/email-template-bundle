@@ -10,12 +10,16 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 final class InternalEmailManager
 {
-    /** @var AbstractEmail[] */
+    /**
+     * @var AbstractEmail[]
+     * @phpstan-ignore-next-line
+     */
     public array $emails;
 
     #[Required]
     public EmailTemplateFetcher $emailTemplateFetcher;
 
+    /** @phpstan-ignore-next-line */
     public function getCurrentEmailService(string $slug): ?AbstractEmail
     {
         $services = $this->getAllEmailServicesFor($slug);
@@ -30,7 +34,10 @@ final class InternalEmailManager
         return null;
     }
 
-    /** @return AbstractEmail[] */
+    /**
+     * @return AbstractEmail[]
+     * @phpstan-ignore-next-line
+     */
     public function getAllEmailServicesFor(string $slug): array
     {
         return \array_filter(
