@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace RichId\EmailTemplateBundle\Tests\Domain\Email;
 
-use RichCongress\TestFramework\TestConfiguration\Annotation\TestConfig;
+use RichCongress\TestFramework\TestConfiguration\Attribute\TestConfig;
 use RichId\EmailTemplateBundle\Domain\Constant;
 use RichId\EmailTemplateBundle\Infrastructure\TestCase\EmailTestCase;
 use RichId\EmailTemplateBundle\Tests\Resources\Email\Empty\EmptyEmail;
