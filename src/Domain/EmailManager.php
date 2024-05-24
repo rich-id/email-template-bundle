@@ -43,6 +43,11 @@ final class EmailManager
         $this->mailer->send($email);
     }
 
+    public function sendEmail(Email $email): void
+    {
+        $this->mailer->send($email);
+    }
+
     public function getEmailContent(string $slug, ?EmailModelInterface $data = null): ?string
     {
         $email = $this->generateEmail($slug, $data);
@@ -51,7 +56,7 @@ final class EmailManager
         return !empty($body) ? (string) $body : null;
     }
 
-    private function generateEmail(string $slug, ?EmailModelInterface $data = null): ?Email
+    public function generateEmail(string $slug, ?EmailModelInterface $data = null): ?Email
     {
         $emailService = $this->getEmail($slug);
 
