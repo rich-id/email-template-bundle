@@ -157,6 +157,11 @@ abstract class AbstractEmail
         return [];
     }
 
+    protected function getReplyTo(): ?string
+    {
+        return null;
+    }
+
     protected function emailUpdater(Email $email): void
     {
     }
@@ -199,6 +204,10 @@ abstract class AbstractEmail
 
         if (!empty($this->getFrom())) {
             $email->from(...\array_unique($this->getFrom()));
+        }
+
+        if ($this->getReplyTo() !== null) {
+            $email->addReplyTo($this->getReplyTo());
         }
 
         foreach ($this->getAttachments() as $attachment) {
