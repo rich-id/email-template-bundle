@@ -31,7 +31,9 @@ final class AdministrationEmailsFetcher
                     $email->getEmailSlug(),
                     $email->getName(),
                     ($this->emailTemplateFetcher)($email->getEmailSlug()),
-                    $email::TEMPLATES
+                    $email::TEMPLATES,
+                    $email->getCategorySlug(),
+                    $email->getCategoryName()
                 );
 
                 continue;

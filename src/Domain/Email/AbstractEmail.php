@@ -25,6 +25,8 @@ abstract class AbstractEmail
     protected const BODY_TYPE_TRANSLATION = 'translation';
     protected const BODY_TYPE_TWIG = 'twig';
 
+    protected const CATEGORY = null;
+
     protected const TRANSLATION_DOMAIN = 'emails';
     protected const TEMPLATING_FOLDER = 'emails';
 
@@ -67,6 +69,24 @@ abstract class AbstractEmail
     {
         return $this->translator->trans(
             \sprintf('%s.name', $this->getEmailSlug()),
+            [],
+            static::TRANSLATION_DOMAIN
+        );
+    }
+
+    public function getCategorySlug(): ?string
+    {
+        return static::CATEGORY;
+    }
+
+    public function getCategoryName(): ?string
+    {
+        if (static::CATEGORY === null) {
+            return null;
+        }
+
+        return $this->translator->trans(
+            \sprintf('category.%s', static::CATEGORY),
             [],
             static::TRANSLATION_DOMAIN
         );
