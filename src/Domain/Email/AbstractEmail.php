@@ -19,6 +19,7 @@ abstract class AbstractEmail
 {
     public const TEMPLATES = [Constant::DEFAULT_TEMPLATE];
     public const EMAIL_SLUG_HEADER = 'abstract-email-slug';
+    public const CUSTOM_SENDER_NAME_HEADER = 'custom-sender-name';
 
     protected const BODY_TYPE = self::BODY_TYPE_TRANSLATION;
 
@@ -141,6 +142,11 @@ abstract class AbstractEmail
         return [];
     }
 
+    protected function getCustomSenderName(): ?string
+    {
+        return null;
+    }
+
     protected function getBody(): string
     {
         if (static::BODY_TYPE === static::BODY_TYPE_TRANSLATION) {
@@ -234,6 +240,10 @@ abstract class AbstractEmail
             if ($attachment instanceof Attachment) {
                 $email->attach($attachment->getData(), $attachment->getFilename(), $attachment->getContentType());
             }
+        }
+
+        if ($this->getCustomSenderName() !== null) {
+            $email->getHeaders()->addTextHeader(self::CUSTOM_SENDER_NAME_HEADER, $this->getCustomSenderName());
         }
 
         $this->emailUpdater($email);
