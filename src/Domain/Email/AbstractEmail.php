@@ -57,6 +57,7 @@ abstract class AbstractEmail
         return $this;
     }
 
+    /** @return non-empty-string */
     abstract public function getEmailSlug(): string;
 
     /** @return string[] */
