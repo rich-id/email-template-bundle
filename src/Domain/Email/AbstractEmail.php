@@ -11,6 +11,7 @@ use RichId\EmailTemplateBundle\Domain\Fetcher\EmailTemplateFetcher;
 use RichId\EmailTemplateBundle\Domain\Model\EmailModelInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TemplatingInterface;
 use RichId\EmailTemplateBundle\Domain\Port\TranslatorInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -38,6 +39,9 @@ abstract class AbstractEmail
 
     #[Required]
     public TranslatorInterface $translator;
+
+    #[Required]
+    public ParameterBagInterface $parameterBag;
 
     #[Required]
     public EmailTemplateFetcher $emailTemplateFetcher;
@@ -193,6 +197,12 @@ abstract class AbstractEmail
     {
     }
 
+    /** @return string[] */
+    protected function getIgnoredWords(): array
+    {
+        return $this->parameterBag->get('rich_id_email_template.ignored_words');
+    }
+
     final protected function getEmail(): ?Email
     {
         $template = $this->getTemplateSlug();
@@ -215,8 +225,8 @@ abstract class AbstractEmail
 
         /** @var Email $email */
         $email = new (static::EMAIL_CLASS)();
-        $email->subject($this->getSubject())
-            ->html($this->getBody())
+        $email->subject($this->cleanIgnoredWords($this->getSubject()))
+            ->html($this->cleanIgnoredWords($this->getBody()))
             ->to(...\array_unique($to));
 
         $email->getHeaders()->addTextHeader(self::EMAIL_SLUG_HEADER, $this->getEmailSlug());
@@ -250,6 +260,11 @@ abstract class AbstractEmail
         $this->emailUpdater($email);
 
         return $email;
+    }
+
+    private function cleanIgnoredWords(?string $message): ?string
+    {
+        return \str_replace($this->getIgnoredWords(), '', $message);
     }
 
     final public function supportTemplate(string $template): bool
