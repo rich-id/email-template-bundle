@@ -134,8 +134,15 @@ abstract class AbstractEmail
 
     protected function getSubject(): string
     {
+        $translationKey = \sprintf('%s.%s.%s', $this->getEmailSlug(), $this->getTemplateSlug(), 'subject');
+        $translation = $this->translator->trans($translationKey, $this->customSubjectParameters(), static::TRANSLATION_DOMAIN);
+
+        if ($translation !== $translationKey) {
+            return $translation;
+        }
+
         return $this->translator->trans(
-            \sprintf('%s.%s.%s', $this->getEmailSlug(), $this->getTemplateSlug(), 'subject'),
+            \sprintf('%s.%s.%s', $this->getEmailSlug(), 'default', 'subject'),
             $this->customSubjectParameters(),
             static::TRANSLATION_DOMAIN
         );
