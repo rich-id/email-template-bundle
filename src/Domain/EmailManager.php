@@ -59,13 +59,8 @@ final class EmailManager
     public function generateEmail(string $slug, ?EmailModelInterface $data = null): ?Email
     {
         $emailService = $this->getEmail($slug);
-
         $method = new \ReflectionMethod($emailService, 'getEmail');
-        $method->setAccessible(true);
 
-        $email = $method->invoke($emailService->setData($data));
-        $method->setAccessible(false);
-
-        return $email;
+        return $method->invoke($emailService->setData($data));
     }
 }
