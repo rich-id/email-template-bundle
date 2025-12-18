@@ -260,7 +260,7 @@ abstract class AbstractEmail
             }
         }
 
-        if ($this->getCustomSenderName() !== null) {
+        if (!empty($this->getCustomSenderName())) {
             $email->getHeaders()->addTextHeader(self::CUSTOM_SENDER_NAME_HEADER, $this->getCustomSenderName());
         }
 
