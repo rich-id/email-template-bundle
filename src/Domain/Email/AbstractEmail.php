@@ -236,7 +236,11 @@ abstract class AbstractEmail
             ->html($this->cleanIgnoredWords($this->getBody()))
             ->to(...\array_unique($to));
 
-        $email->getHeaders()->addTextHeader(self::EMAIL_SLUG_HEADER, $this->getEmailSlug());
+        $emailSlug = $this->getEmailSlug();
+
+        if (!empty($emailSlug)) {
+            $email->getHeaders()->addTextHeader(self::EMAIL_SLUG_HEADER, $emailSlug);
+        }
 
         if (!empty($this->getCc())) {
             $email->cc(...\array_unique($this->getCc()));
